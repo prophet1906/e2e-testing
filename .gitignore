@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # newman test reports
-newman/
+public/report.html
