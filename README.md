@@ -41,26 +41,31 @@ Since Sock Shop is a cloud-native application, we can run it on a wide variety o
 **Scenario 1:** An existing user with a proper shipping address, payment card details and a non-empty cart can place an order successfully.
 
 **Why?** - This is the core functionality of the sock shop.
+![Scenario 1](./imgs/scenario_1.png "Scenario 1")
 ___
 
 **Scenario 2:** A login attempt from a non-existent user fails and new users can register themselves.
 
 **Why?** - To prevent malicious login attempts and allow onboarding of new users.
+![Scenario 2](./imgs/scenario_2.png "Scenario 2")
 ___
 
 **Scenario 3:** Card payments are declined and order isn't placed when items worth more than **100$** are added to the cart.
 
 **Why?** Shows an unrealistic purchase for a small commodity like a sock.
+![Scenario 3](./imgs/scenario_3.png "Scenario 3")
 ___
 
 **Scenario 4:** Order cannot be placed when the shipping address or card information is missing.
 
 **Why?** Sock shop cannot process orders with incomplete information.
+![Scenario 4](./imgs/scenario_4.png "Scenario 4")
 ___
 
 **Scenario 5:** Order cannot be placed with an empty cart.
 
-**Why?** Accepting an order without any items doesn't make any sense. What should we ship to user?
+**Why?** Accepting an order without any items doesn't make any sense. What should we ship to the user?
+![Scenario 5](./imgs/scenario_5.png "Scenario 5")
 
 ## Bugs Uncovered
 - `GET /orders` should return a list of all orders with status code `OK - 200`, but was returning `CREATED - 201`.
@@ -127,5 +132,8 @@ using swagger. Test reports are generated at `public/report.html`. Test report f
 
 
 # Contributors
-- **Sayak** - https://github.com/SykChw
-- **Shubham** - https://github.com/prophet1906
+- **Sayak** - MS2023012
+- **Shubham** - PH2022508
+
+# Repo Source
+https://github.com/prophet1906/e2e-testing
