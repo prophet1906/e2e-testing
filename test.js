@@ -10,6 +10,7 @@ const environmentPath = path.join(__dirname, "env.json");
 function runTests() {
     fs.readdir(testDir, (err, testCollections) => {
         async.eachSeries(testCollections, (testCollection, next) => {
+            const scenarioId = testCollection.split('.')[0];
             const collectionPath = path.join(testDir, testCollection);
             const reportPath = path.join(reportDir, testCollection).replace('json', 'html');
             newman.run({
@@ -18,7 +19,9 @@ function runTests() {
                 reporters: ['cli', 'htmlextra'],
                 reporter: {
                     htmlextra: {
-                        export: reportPath
+                        export: reportPath,
+                        browserTitle: scenarioId,
+                        title: scenarioId
                     }
                 }
             }).on('start', (err, args) => {
