@@ -1,3 +1,9 @@
+# Target System
+## Sock Shop
+Sock Shop simulates the user-facing part of an e-commerce website that sells socks. It is intended to aid the demonstration and testing of microservice and cloud native technologies. Sock Shop is maintained by Weaveworks and Container Solutions. Documentation for sock shop is available at https://microservices-demo.github.io/. Full source code for microservice demo is accessible at https://github.com/microservices-demo.
+## Architecture
+![Architecture](./imgs/Architecture.png "Architecture")
+
 # Pre-requisites
 - **Minikube** - For running local k8s cluster, optional if deploying to public cloud
 - **Kubectl** - For k8s cluster management
@@ -45,9 +51,6 @@ https://www.weave.works/oss/scope/
 # Exploring API Specs and Test Reports
 Run `npm start` to start the application. It hosts OpenAPI specs for all microservices
 using swagger. Test reports are generated at `public/report.html`. Test report for last run is also accessible at http://localhost:4004/report.html
-
-# Source Code
-Full source code for microservice demo example is available at https://github.com/microservices-demo
 
 # Application Architecture
 TODO: Add diagram and write basic information about architecture of microservices demo

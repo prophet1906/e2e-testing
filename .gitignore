@@ -131,3 +131,5 @@ dist
 
 # newman test reports
 public/reports
+
+.DS_Store
