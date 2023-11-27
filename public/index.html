@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="SwaggerUI"
+    />
+    <title>SwaggerUI</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui.css" />
+  </head>
+  <body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-bundle.js" crossorigin></script>
+  <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-standalone-preset.js" crossorigin></script>
+  <script>
+      function getSpecURL(serviceName) {
+      return `http://${window.location.host}/api-specs/${serviceName}.json`;
+    }
+    window.onload = () => {
+      window.ui = SwaggerUIBundle({
+        urls: [
+          {
+            url: getSpecURL('carts'),
+            name: 'Cart Service'
+          },
+          {
+            url: getSpecURL('catalogue'),
+            name: 'Catalogue Service'
+          },
+          {
+            url: getSpecURL('orders'),
+            name: 'Order Service'
+          },
+          {
+            url: getSpecURL('payment'),
+            name: 'Payment Service'
+          },
+          {
+            url: getSpecURL('user'),
+            name: 'User Service'
+          }
+        ],
+        dom_id: '#swagger-ui',
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: "StandaloneLayout",
+      });
+    };
+  </script>
+  </body>
+</html>
