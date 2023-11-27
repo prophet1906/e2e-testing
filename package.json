@@ -4,7 +4,7 @@
   "description": "Server Side Integration testing of Microservices demo application",
   "scripts": {
     "start": "node index.js",
-    "test": "newman run -e env.json -r cli,htmlextra tests/*"
+    "test": "newman run -e env.json -r cli,htmlextra --reporter-htmlextra-export ./public/report.html tests/*"
   },
   "keywords": [],
   "author": "",

@@ -30,11 +30,9 @@ https://www.weave.works/oss/scope/
 # Exploring tests
 Test reports are generated in newman folder.
 
-# Exploring API Specs
-```
-# Start express server to host OpenAPI specs with swagger
-npm start
-```
+# Exploring API Specs and Test Reports
+Run `npm start` to start the application. It hosts OpenAPI specs for all microservices
+using swagger. Test report for last run is also accessible at http://localhost:4004/report.html
 
 # Source Code
 Full source code for microservice demo example is available at https://github.com/microservices-demo
