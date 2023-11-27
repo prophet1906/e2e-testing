@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "92d545d1-b1e7-4fbb-9fec-56f5089129bb",
-		"name": "Test: Existing user can place an order successfully",
+		"_postman_id": "8eb29f4f-6c12-4171-a199-d3121acad214",
+		"name": "scenario_3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "7261725"
 	},
@@ -22,6 +22,23 @@
 							"});",
 							"",
 							"postman.setNextRequest(\"#2 Get customer Id\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// cleanup all cookies from previous run",
+							"const jar = pm.cookies.jar();",
+							"jar.clear(pm.request.url, function (error) {",
+							"    if(error) {",
+							"        console.error(error);",
+							"    } else {",
+							"        console.log(\"Successful pre test cleanup.\");",
+							"    }",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -103,11 +120,11 @@
 							"    pm.response.to.have.status(200);",
 							"    const response = pm.response.json();",
 							"    pm.expect(response.length).to.be.greaterThan(1);",
-							"    const figueroaSock = response.find(sock => sock.name === \"Figueroa\");",
-							"    pm.environment.set(\"figueroaSock\", JSON.stringify({id: figueroaSock.id}));",
+							"    const holySock = response.find(sock => sock.name === \"Holy\");",
+							"    pm.environment.set(\"holySock\", JSON.stringify({id: holySock.id}));",
 							"});",
 							"",
-							"postman.setNextRequest(\"#4 Add Figueroa sock to cart\");"
+							"postman.setNextRequest(\"#4 Add Holy sock to cart\");"
 						],
 						"type": "text/javascript"
 					}
@@ -129,7 +146,7 @@
 			"response": []
 		},
 		{
-			"name": "#4 Add Figueroa sock to cart",
+			"name": "#4 Add Holy sock to cart",
 			"event": [
 				{
 					"listen": "test",
@@ -150,7 +167,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{{figueroaSock}}",
+					"raw": "{{holySock}}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -178,7 +195,6 @@
 						"exec": [
 							"pm.test(\"Validate cart content\", function () {",
 							"    pm.response.to.have.status(200);",
-							"    const figueroaSock = JSON.parse(pm.environment.get(\"figueroaSock\"));",
 							"    const response = pm.response.json();",
 							"    pm.expect(response.length).to.be.greaterThan(0);",
 							"});",
@@ -217,7 +233,7 @@
 							"    pm.environment.set(\"order_count\", pm.response.json().length);",
 							"});",
 							"",
-							"postman.setNextRequest(\"#7 Place order\");"
+							"postman.setNextRequest(\"#7 Place order with Payment Declined\");"
 						],
 						"type": "text/javascript"
 					}
@@ -239,7 +255,7 @@
 			"response": []
 		},
 		{
-			"name": "#7 Place order",
+			"name": "#7 Place order with Payment Declined",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -255,7 +271,10 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Validate cart content\", function () {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(406);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.error).to.eql('Not Acceptable');",
+							"    pm.expect(responseJson.message).to.eql('Payment declined: amount exceeds 100.00');",
 							"});",
 							"",
 							"postman.setNextRequest(\"#8 Validate Order\");"
@@ -302,8 +321,11 @@
 							"    pm.response.to.have.status(200);",
 							"    const oldOrderCount = pm.environment.get(\"order_count\");",
 							"    const currentOrderCount = pm.response.json()._embedded.customerOrders.length;",
-							"    pm.expect(currentOrderCount).to.be.eq(Number(oldOrderCount) + 1);",
-							"});"
+							"    // No new orders were created as payment was declined",
+							"    pm.expect(currentOrderCount).to.be.eq(Number(oldOrderCount));",
+							"});",
+							"",
+							"postman.setNextRequest(\"#9 Empty Cart and Cleanup\");"
 						],
 						"type": "text/javascript"
 					}
@@ -334,6 +356,58 @@
 							"key": "custId",
 							"value": "{{customer_id}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#9 Empty Cart and Cleanup",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Cleanup\", function () {",
+							"    pm.response.to.have.status(202);",
+							"    const jar = pm.cookies.jar();",
+							"",
+							"    jar.clear(pm.request.url, function (error) {",
+							"        if(error) {",
+							"            console.error(error);",
+							"        } else {",
+							"            console.log(\"Successful post test cleanup.\");",
+							"        }",
+							"    });",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
 					]
 				}
 			},
