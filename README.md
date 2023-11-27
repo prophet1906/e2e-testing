@@ -33,8 +33,8 @@ Full setup with all microservices can be run in any public cloud infrastructure.
 
 ## Specific Testing setup
 Since Sock Shop is a cloud-native application, we can run it on a wide variety of platforms. The following setup was used by us during test development:
-- **Sayak** - Windows + Docker + Docker Compose + Local Weave
 - **Shubham** - Linux + Podman + Minikube + Weave in K8s
+- **Sayak** - Windows + Docker + Docker Compose + Local Weave
 
 
 ## Tested Scenarios
@@ -132,8 +132,8 @@ using swagger. Test reports are generated at `public/report.html`. Test report f
 
 
 # Contributors
-- **Sayak** - MS2023012
 - **Shubham** - PH2022508
+- **Sayak Chowdhury** - MS2023012
 
 # Repo Source
 https://github.com/prophet1906/e2e-testing
