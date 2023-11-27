@@ -1,6 +1,3 @@
-# Source Code
-Full source code for microservice demo example is available at https://github.com/microservices-demo
-
 # Pre-requisites
 - **Minikube** - For running local k8s cluster, optional if deploying to public cloud
 - **Kubectl** - For k8s cluster management
@@ -32,3 +29,24 @@ https://www.weave.works/oss/scope/
 
 # Exploring tests
 Test reports are generated in newman folder.
+
+# Source Code
+Full source code for microservice demo example is available at https://github.com/microservices-demo
+
+# Application Architecture
+TODO: Add diagram and write basic information about architecture of microservices demo
+
+# Tested Flows
+TODO: Add diagrams for all the tested flows with name
+
+# Advantages of our approach
+TODO: List characteristics which make this approach useful
+
+# Disadvantages of our approach
+TODO: List characteristics which make this approach infeasible
+
+# Why we went with this approach?
+TODO: Add concrete reasons why we picked this approach over others
+
+# Contributors
+TODO: Add mail/contact info
