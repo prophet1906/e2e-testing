@@ -128,7 +128,7 @@ https://www.weave.works/oss/scope/
 
 # Exploring API Specs and Test Reports
 Run `npm start` to start the application. It hosts OpenAPI specs for all microservices
-using swagger. Test reports are generated at `public/report.html`. Test report for last run is also accessible at http://localhost:4004/report.html
+using Swagger. Test reports are generated in `public/reports` directory. Test reports for the last run are also accessible at `http://localhost:4004/reports/<collection_name>.html`
 
 
 # Contributors
