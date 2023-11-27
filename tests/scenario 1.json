@@ -1,0 +1,363 @@
+{
+	"info": {
+		"_postman_id": "92d545d1-b1e7-4fbb-9fec-56f5089129bb",
+		"name": "Test: Existing user can place an order successfully",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7261725"
+	},
+	"item": [
+		{
+			"name": "#1 Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login Succeeded\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Cookies are correctly set\", function () {",
+							"    pm.expect(pm.cookies.has(\"logged_in\"));",
+							"});",
+							"",
+							"postman.setNextRequest(\"#2 Get customer Id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#2 Get customer Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetch customer information\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const response = pm.response.json();",
+							"    pm.environment.set(\"customer_id\", response.id);",
+							"});",
+							"",
+							"postman.setNextRequest(\"#3 Get socks from catalogue\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/customers/user",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customers",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#3 Get socks from catalogue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetched socks from catalogue\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.length).to.be.greaterThan(1);",
+							"    const figueroaSock = response.find(sock => sock.name === \"Figueroa\");",
+							"    pm.environment.set(\"figueroaSock\", JSON.stringify({id: figueroaSock.id}));",
+							"});",
+							"",
+							"postman.setNextRequest(\"#4 Add Figueroa sock to cart\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/catalogue",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"catalogue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#4 Add Figueroa sock to cart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sock successfully added to cart\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"postman.setNextRequest(\"#5 Validate cart content\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{figueroaSock}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#5 Validate cart content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate cart content\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const figueroaSock = JSON.parse(pm.environment.get(\"figueroaSock\"));",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.length).to.be.greaterThan(0);",
+							"});",
+							"",
+							"postman.setNextRequest(\"#6 Get current orders\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#6 Get current orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get current orders\", function () {",
+							"    // This is a bug, ideally GET request should return status code 200",
+							"    pm.response.to.have.status(201);",
+							"    pm.environment.set(\"order_count\", pm.response.json().length);",
+							"});",
+							"",
+							"postman.setNextRequest(\"#7 Place order\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#7 Place order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate cart content\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"postman.setNextRequest(\"#8 Validate Order\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#8 Validate Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate cart content\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const oldOrderCount = pm.environment.get(\"order_count\");",
+							"    const currentOrderCount = pm.response.json()._embedded.customerOrders.length;",
+							"    pm.expect(currentOrderCount).to.be.eq(Number(oldOrderCount) + 1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/orders/search/customerId?sort=date&custId={{customer_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"orders",
+						"search",
+						"customerId"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "date"
+						},
+						{
+							"key": "custId",
+							"value": "{{customer_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
